@@ -24,8 +24,7 @@ def solution(schedules, timelogs, startday):
                 cnt += 1
             
             current_startday += 1 
-            if current_startday > 7:  # 주가 끝나면 다시 월요일로 초기화
-                current_startday = 1
+
         
         # 평일 제시간에 출근한 경우
         if cnt >= 5:  
