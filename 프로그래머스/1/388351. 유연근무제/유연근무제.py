@@ -1,33 +1,25 @@
 def solution(schedules, timelogs, startday):
     answer = 0
+    # 출근 희망 시간을 분 단위로 변환
+    schedules = [(schedule // 100) * 60 + schedule % 100 for schedule in schedules]
     
-    # 출근 희망 시각을 분 단위로 변환
-    for i in range(len(schedules)):
-        schedules[i] = (schedules[i] // 100) * 60 + schedules[i] % 100   
-
     for i in range(len(timelogs)):  # 직원
         cnt = 0
         current_startday = startday 
         
         for j in range(len(timelogs[0])):  # 요일
-            timelogs[i][j] = (timelogs[i][j] // 100) * 60 + timelogs[i][j] % 100   
-
-            # 주말 처리
-            if current_startday == 6 or current_startday == 7: 
-                current_startday += 1
-                if current_startday > 7:  
-                    current_startday = 1
+            if current_startday in (6, 7): # 주말 처리
+                current_startday = 1 if current_startday == 7 else current_startday + 1
                 continue
+    
+            log_time = (timelogs[i][j] // 100) * 60 + timelogs[i][j] % 100 # 출근 시간
             
-            # 평일: 출근 시각이 희망 시각 + 10분 이내인지 확인
-            if timelogs[i][j] <= schedules[i] + 10:  
+            # 평일: 출근 시간이 희망 시간 + 10분 이내인지 확인
+            if log_time <= schedules[i] + 10:
                 cnt += 1
-            
             current_startday += 1 
 
-        
-        # 평일 제시간에 출근한 경우
-        if cnt >= 5:  
+        # 평일 시간 내 출근한 경우
+        if cnt == 5:
             answer += 1
-        
-    return answer  
+    return answer
